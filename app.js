@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .to(".navbar-bouncing-dots", { display: "none", duration: 0.1 });
     }
 
-    // EFECTO PORTAL TRAS ENTRADA (SÓLO COMPUTADORES)
+    // EFECTO PORTAL TRAS ENTRADA
     if (window.innerWidth > 768) {
         const portalTl = gsap.timeline({
             scrollTrigger: {
@@ -74,11 +74,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }, "-=0.3");
     } else {
-        // SOLUCIÓN TOTAL EN CELULARES: Remueve por completo las capas del tótem
+        // SOLUCIÓN TOTAL EN CELULARES
         gsap.set(".portal-viewport", { display: "none" });
         gsap.set(".portal-container", { display: "none" });
-        
-        // Carga de golpe la web detrás limpia
         gsap.set(".content-wrapper-delayed", { opacity: 1, visibility: "visible" });
         gsap.set(".navbar", { opacity: 1, y: 0 });
         ejecutarShowBouncingDotsNav();
@@ -265,17 +263,19 @@ document.addEventListener("DOMContentLoaded", () => {
     function bucleNodos() { ctx.clearRect(0, 0, canvas.width, canvas.height); trazarConexiones(); requestAnimationFrame(bucleNodos); }
     ajustarCanvas(); window.addEventListener("resize", ajustarCanvas); requestAnimationFrame(bucleNodos);
 
-    // PERSPECTIVA TILT LOGO DEL NAV
-    const logoProminent = document.querySelector(".logo-neon-prominent");
-    if (logoProminent) {
-        logoProminent.addEventListener("mousemove", (e) => {
-            const rect = logoProminent.getBoundingClientRect();
+    // ==========================================================================
+    // REPARACIÓN COMPLETA UNIFICADA SINTAXIS: PERSPECTIVA TILT LOGO NAV
+    // ==========================================================================
+    const logoNavbarProminent = document.querySelector(".logo-neon-prominent");
+    if (logoNavbarProminent) {
+        logoNavbarProminent.addEventListener("mousemove", (e) => {
+            const rect = logoNavbarProminent.getBoundingClientRect();
             const x = e.clientX - rect.left; const y = e.clientY - rect.top;
             const tX = x - (rect.width / 2); const tY = y - (rect.height / 2);
-            gsap.to(logoProminent, { duration: 0.3, rotateX: -tY * 0.15, rotateY: tX * 0.15, transformPerspective: 600, ease: "power2.out" });
+            gsap.to(logoNavbarProminent, { duration: 0.3, rotateX: -tY * 0.15, rotateY: tX * 0.15, transformPerspective: 600, ease: "power2.out" });
         });
-        logoProminent.addEventListener("mouseleave", () => {
-            gsap.to(logoProminent, { duration: 0.6, rotateX: 0, rotateY: 0, ease: "elastic.out(1, 0.5)" });
+        logoNavbarProminent.addEventListener("mouseleave", () => {
+            gsap.to(logoNavbarProminent, { duration: 0.6, rotateX: 0, rotateY: 0, ease: "elastic.out(1, 0.5)" });
         });
     }
 
@@ -286,7 +286,9 @@ document.addEventListener("DOMContentLoaded", () => {
         else { if (window.innerWidth > 992) gsap.to(logo, { height: "125px", transform: "translateY(-44%)", duration: 0.3, ease: "power2.out" }); }
     });
 
-    // CONTADORES NUMÉRICOS AUTOMÁTICOS ACTIVADOS POR SELECTOR CONTADOR-NEON
+    // ==========================================================================
+    // SOLUCIÓN TOTAL: REPARACIÓN ESTRICTA DEL GATILLO DE CONTADORES GSAP CORE
+    // ==========================================================================
     const contadoresNeon = document.querySelectorAll(".contador-neon");
     contadoresNeon.forEach(contador => {
         const valorFinal = parseInt(contador.getAttribute("data-count"));
@@ -319,8 +321,8 @@ document.addEventListener("DOMContentLoaded", () => {
         y: 100, opacity: 0, duration: 1.4, ease: "power3.out"
     });
 
-    // TILT 3D CARD ELEMENTOS
-    const elementos3D = document.querySelectorAll(".animate-3d, .logo-cliente-wrapper, .ventaja-item-wow");
+    // TILT 3D 
+    const elementos3D = document.querySelectorAll(".animate-3d, .logo-cliente-wrapper, .console-tab-item");
     elementos3D.forEach(elemento => {
         const glow = elemento.querySelector(".spotlight-glow");
         elemento.addEventListener("mousemove", (e) => {
