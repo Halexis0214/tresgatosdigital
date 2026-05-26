@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .to(".navbar-bouncing-dots", { display: "none", duration: 0.1 });
     }
 
-    // EFECTO PORTAL TRAS ENTRADA
+    // EFECTO PORTAL TRAS ENTRADA (SÓLO COMPUTADORES)
     if (window.innerWidth > 768) {
         const portalTl = gsap.timeline({
             scrollTrigger: {
@@ -74,6 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }, "-=0.3");
     } else {
+        // SOLUCIÓN TOTAL EN CELULARES: Remueve por completo las capas del tótem
+        gsap.set(".portal-viewport", { display: "none" });
+        gsap.set(".portal-container", { display: "none" });
+        
+        // Carga de golpe la web detrás limpia
         gsap.set(".content-wrapper-delayed", { opacity: 1, visibility: "visible" });
         gsap.set(".navbar", { opacity: 1, y: 0 });
         ejecutarShowBouncingDotsNav();
@@ -179,9 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.addEventListener("touchend", finalizarArrastre);
     }
 
-    // ==========================================================================
-    // CONTROLADOR DE NAVEGACIÓN - CONSOLA INTERACTIVA EN LA WEB
-    // ==========================================================================
+    // GESTIÓN CONSOLA INTERACTIVA
     const tabBotones = document.querySelectorAll('.console-tab-item');
     const screenCards = document.querySelectorAll('.screen-view-card');
 
@@ -195,19 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 screenCards.forEach(card => {
                     card.classList.remove('active');
-                    
                     if (card.id === `view-${targetId}`) {
                         card.classList.add('active');
-                        
-                        // Micro-animación elástica remota al conmutar pestañas
-                        gsap.fromTo(card.querySelector('.view-visual-demo'), 
-                            { scale: 0.9, opacity: 0 },
-                            { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.2)" }
-                        );
-                        gsap.fromTo(card.querySelectorAll('.view-info-text > *'),
-                            { y: 15, opacity: 0 },
-                            { y: 0, opacity: 1, duration: 0.4, stagger: 0.1, ease: "power2.out" }
-                        );
+                        gsap.fromTo(card.querySelector('.view-visual-demo'), { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.2)" });
+                        gsap.fromTo(card.querySelectorAll('.view-info-text > *'), { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.1, ease: "power2.out" });
                     }
                 });
             });
@@ -292,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
         else { if (window.innerWidth > 992) gsap.to(logo, { height: "125px", transform: "translateY(-44%)", duration: 0.3, ease: "power2.out" }); }
     });
 
-    // CONTADORES NUMÉRICOS AUTOMÁTICOS
+    // CONTADORES NUMÉRICOS AUTOMÁTICOS ACTIVADOS POR SELECTOR CONTADOR-NEON
     const contadoresNeon = document.querySelectorAll(".contador-neon");
     contadoresNeon.forEach(contador => {
         const valorFinal = parseInt(contador.getAttribute("data-count"));
@@ -325,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
         y: 100, opacity: 0, duration: 1.4, ease: "power3.out"
     });
 
-    // TILT 3D 
+    // TILT 3D CARD ELEMENTOS
     const elementos3D = document.querySelectorAll(".animate-3d, .logo-cliente-wrapper, .ventaja-item-wow");
     elementos3D.forEach(elemento => {
         const glow = elemento.querySelector(".spotlight-glow");
