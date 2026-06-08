@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .to(".navbar-bouncing-dots", { display: "none", duration: 0.1 });
     }
 
-    // EFECTO PORTAL TRAS ENTRADA
+    // EFECTO PORTAL TRAS ENTRADA (PROFUNDIDAD MÁXIMA EN PC)
     if (window.innerWidth > 768) {
         const portalTl = gsap.timeline({
             scrollTrigger: {
@@ -74,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }, "-=0.3");
     } else {
-        // SOLUCIÓN TOTAL EN CELULARES
         gsap.set(".portal-viewport", { display: "none" });
         gsap.set(".portal-container", { display: "none" });
         gsap.set(".content-wrapper-delayed", { opacity: 1, visibility: "visible" });
@@ -113,7 +112,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // CARRUSEL 3D CILÍNDRICO ORIGINAL
+    // ==========================================================================
+    // SOLUCIÓN RADICAL CORREGIDA: CARRUSEL 3D CON APAGADO ELÉCTRICO DE CONFLICTOS
+    // ==========================================================================
     const stage3D = document.querySelector(".carousel-stage");
     const wrapper3D = document.querySelector(".carousel-3d-wrapper");
     const tótems = document.querySelectorAll(".carousel-card");
@@ -134,28 +135,29 @@ document.addEventListener("DOMContentLoaded", () => {
         let rotacionBase = 0;
         let pilotoAutomatedActive = true;
         let velocidadPiloto = -0.12; 
+        let requestIDPiloto = null; 
 
-        function buclePilotoAutomatico() {
+        // Función del motor automático
+        function loopPilotoAutomatico() {
             if (pilotoAutomatedActive && !estaArrastrando) {
                 rotacionActualY += velocidadPiloto;
                 gsap.set(wrapper3D, { rotateY: rotacionActualY });
+                requestIDPiloto = requestAnimationFrame(loopPilotoAutomatico);
             }
-            requestAnimationFrame(buclePilotoAutomatico);
         }
-        requestAnimationFrame(buclePilotoAutomatico);
-
-        wrapper3D.addEventListener("mouseover", () => {
-            pilotoAutomatedActive = false; 
-            const cuadranteDestino = Math.round(rotacionActualY / anguloPorTarjeta) * anguloPorTarjeta;
-            gsap.to(wrapper3D, { rotateY: cuadranteDestino, duration: 0.4, ease: "power2.out", onComplete: () => { rotacionActualY = cuadranteDestino; } });
-        });
-
-        wrapper3D.addEventListener("mouseout", () => { pilotoAutomatedActive = true; });
+        requestIDPiloto = requestAnimationFrame(loopPilotoAutomatico);
 
         const iniciarArrastre = (e) => {
             estaArrastrando = true;
             pilotoAutomatedActive = false; 
-            mouseXInicio = e.clientX || e.touches[0].clientX; 
+            
+            if (requestIDPiloto) {
+                cancelAnimationFrame(requestIDPiloto);
+                requestIDPiloto = null;
+            }
+            gsap.killTweensOf(wrapper3D); 
+
+            mouseXInicio = e.clientX || (e.touches && e.touches[0].clientX); 
             rotacionBase = rotacionActualY;
         };
 
@@ -163,6 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!estaArrastrando) return;
             const clienteX = e.clientX || (e.touches && e.touches[0].clientX);
             const diferenciaX = clienteX - mouseXInicio;
+            
             rotacionActualY = rotacionBase + (diferenciaX * 0.28); 
             gsap.set(wrapper3D, { rotateY: rotacionActualY });
         };
@@ -170,21 +173,37 @@ document.addEventListener("DOMContentLoaded", () => {
         const finalizarArrastre = () => {
             if (!estaArrastrando) return;
             estaArrastrando = false;
+            
             const cuadranteDestino = Math.round(rotacionActualY / anguloPorTarjeta) * anguloPorTarjeta;
-            gsap.to(wrapper3D, { rotateY: cuadranteDestino, duration: 0.5, ease: "power2.out", onComplete: () => { rotacionActualY = cuadranteDestino; pilotoAutomatedActive = true; } });
+            
+            gsap.to(wrapper3D, { 
+                rotateY: cuadranteDestino, 
+                duration: 0.5, 
+                ease: "power2.out", 
+                onComplete: () => { 
+                    rotacionActualY = cuadranteDestino; 
+                    pilotoAutomatedActive = true;
+                    
+                    if (!requestIDPiloto) {
+                        requestIDPiloto = requestAnimationFrame(loopPilotoAutomatico);
+                    }
+                } 
+            });
         };
 
         stage3D.addEventListener("mousedown", iniciarArrastre);
-        document.addEventListener("mousemove", moverArrastre);
-        document.addEventListener("mouseup", finalizarArrastre);
+        window.addEventListener("mousemove", moverArrastre);
+        window.addEventListener("mouseup", finalizarArrastre);
+        
         stage3D.addEventListener("touchstart", iniciarArrastre, { passive: true });
-        document.addEventListener("touchmove", moverArrastre, { passive: true });
-        document.addEventListener("touchend", finalizarArrastre);
+        window.addEventListener("touchmove", moverArrastre, { passive: true });
+        window.addEventListener("touchend", finalizarArrastre);
     }
 
     // GESTIÓN CONSOLA INTERACTIVA
     const tabBotones = document.querySelectorAll('.console-tab-item');
     const screenCards = document.querySelectorAll('.screen-view-card');
+    const panelDerechoVisual = document.querySelector('.console-panel-right');
 
     if (tabBotones.length > 0 && screenCards.length > 0) {
         tabBotones.forEach(boton => {
@@ -202,6 +221,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         gsap.fromTo(card.querySelectorAll('.view-info-text > *'), { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, stagger: 0.1, ease: "power2.out" });
                     }
                 });
+
+                if (window.innerWidth <= 1024 && panelDerechoVisual) {
+                    panelDerechoVisual.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
             });
         });
     }
@@ -263,9 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function bucleNodos() { ctx.clearRect(0, 0, canvas.width, canvas.height); trazarConexiones(); requestAnimationFrame(bucleNodos); }
     ajustarCanvas(); window.addEventListener("resize", ajustarCanvas); requestAnimationFrame(bucleNodos);
 
-    // ==========================================================================
-    // REPARACIÓN COMPLETA UNIFICADA SINTAXIS: PERSPECTIVA TILT LOGO NAV
-    // ==========================================================================
+    // PERSPECTIVA TILT LOGO NAV
     const logoNavbarProminent = document.querySelector(".logo-neon-prominent");
     if (logoNavbarProminent) {
         logoNavbarProminent.addEventListener("mousemove", (e) => {
@@ -286,9 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
         else { if (window.innerWidth > 992) gsap.to(logo, { height: "125px", transform: "translateY(-44%)", duration: 0.3, ease: "power2.out" }); }
     });
 
-    // ==========================================================================
-    // SOLUCIÓN TOTAL: REPARACIÓN ESTRICTA DEL GATILLO DE CONTADORES GSAP CORE
-    // ==========================================================================
+    // CONTADORES NUMÉRICOS AUTOMÁTICOS ACTIVADOS POR SELECTOR CONTADOR-NEON
     const contadoresNeon = document.querySelectorAll(".contador-neon");
     contadoresNeon.forEach(contador => {
         const valorFinal = parseInt(contador.getAttribute("data-count"));
@@ -311,17 +330,27 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // DISPARADORES RECURRENTES EN SCROLL VENTAJAS
-    gsap.from(".logo-neon-trigger-left", {
-        scrollTrigger: { trigger: ".ventajas-section", start: "top 85%", end: "bottom 15%", toggleActions: "restart reverse restart reverse" },
-        x: -300, opacity: 0, duration: 1.2, stagger: 0.2, ease: "back.out(1.1)"
-    });
+    if (window.innerWidth > 768) {
+        gsap.from(".logo-neon-trigger-left", {
+            scrollTrigger: { trigger: ".ventajas-section", start: "top 85%", end: "bottom 15%", toggleActions: "restart reverse restart reverse" },
+            x: -300, opacity: 0, duration: 1.2, stagger: 0.2, ease: "back.out(1.1)"
+        });
+    } else {
+        gsap.from(".logo-neon-trigger-left", {
+            scrollTrigger: { trigger: ".ventajas-section", start: "top 90%", end: "bottom 10%", toggleActions: "restart reverse restart reverse" },
+            x: -150, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power2.out",
+            onComplete: () => {
+                gsap.set(".logo-neon-trigger-left", { clearProps: "transform,x" }); 
+            }
+        });
+    }
 
     gsap.from(".logo-neon-trigger-fade-up", {
         scrollTrigger: { trigger: ".ventajas-section", start: "top 80%", end: "bottom 20%", toggleActions: "restart reverse restart reverse" },
         y: 100, opacity: 0, duration: 1.4, ease: "power3.out"
     });
 
-    // TILT 3D 
+    // TILT 3D CARD ELEMENTOS
     const elementos3D = document.querySelectorAll(".animate-3d, .logo-cliente-wrapper, .console-tab-item");
     elementos3D.forEach(elemento => {
         const glow = elemento.querySelector(".spotlight-glow");

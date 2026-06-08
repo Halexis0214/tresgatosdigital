@@ -53,10 +53,10 @@ body {
     transition: background 0.6s ease;
 }
 
-/* PORTAL */
+/* PORTAL ORIGINAL RESTAURADO CON PARÁMETROS DE ESCALA FIJOS */
 .portal-viewport { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
 .portal-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 500; background: var(--dark-space); will-change: transform; }
-.portal-bg-brand-watermark { position: absolute; width: 85vw; max-width: 1050px; height: auto; display: flex; justify-content: center; align-items: center; z-index: 1; opacity: 0.075; filter: brightness(1.5) contrast(1.2) blur(1px) drop-shadow(0 0 40px rgba(168, 85, 247, 0.4)); pointer-events: none; will-change: transform, opacity; }
+.portal-bg-brand-watermark { position: absolute; width: 85vw; max-width: 1050px; height: auto; display: flex; justify-content: center; align-items: center; z-index: 1; opacity: 0.075; filter: brightness(1.5) contrast(1.2) blur(1px) drop-shadow(0 0 40px rgba(168, 85, 247, 0.4)); pointer-events: none; transform: translateZ(-300px); will-change: transform, opacity; }
 .portal-bg-brand-watermark img { width: 100%; height: auto; object-fit: contain; }
 .portal-totem-frame { background: #111113; padding: 20px 20px 50px 20px; border-radius: 40px 40px 15px 15px; width: 340px; box-shadow: 0 50px 100px rgba(0,0,0,0.9); border: 1px solid rgba(255,255,255,0.06); transform-style: preserve-3d; will-change: transform; position: relative; z-index: 10; animation: auraLed 4s infinite ease-in-out; }
 .portal-screen { width: 100%; height: 460px; border-radius: 20px; overflow: hidden; position: relative; background: #000; }
@@ -66,26 +66,25 @@ body {
 .portal-title { font-size: 2.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.8rem; color: #ffffff; }
 .portal-subtitle { color: rgba(255,255,255,0.45); font-size: 1.05rem; }
 
-/* NAVBAR SYSTEM ISOMETRÍA Y GRAN TAMANO */
+/* NAVBAR SYSTEM: RESPONSIVE Y ADAPTABLE */
 .navbar { position: fixed; top: 1.5rem; left: 5%; width: 90%; background: rgba(6, 6, 8, 0.6); backdrop-filter: blur(25px); border: 1px solid var(--border-glass); padding: 0 3.5rem; height: 85px; border-radius: 100px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; opacity: 0; transform: translateY(-20px); overflow: visible; }
 .logo-left-container { position: relative; width: 168px; height: 102px; display: flex; justify-content: center; align-items: center; overflow: visible !important; }
 
 .navbar-bouncing-dots {
-    display: flex; gap: 18px; align-items: center; justify-content: center;
+    display: flex; gap: 14px; align-items: center; justify-content: center;
     position: absolute; width: 100%; height: 100%; left: 0; top: 0; z-index: 2400;
 }
 .navbar-bouncing-dots .nav-dot {
-    width: 20px; height: 20px; background-color: #ffffff; border-radius: 50%; display: inline-block;
+    width: 16px; height: 16px; background-color: #ffffff; border-radius: 50%; display: inline-block;
     box-shadow: 0 0 20px rgba(255,255,255,0.8); will-change: transform, opacity;
 }
 
 .logo-neon-prominent { 
-    height: 150px !important; width: auto !important; object-fit: contain; position: absolute; left: 0; top: 50%; 
-    transform: translateY(-44%) scale(0.7) !important; 
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), height 0.4s ease !important; 
-    cursor: pointer !important; pointer-events: auto !important; z-index: 2500 !important;
-    opacity: 0; 
-    filter: none; 
+    height: 125px !important; width: auto !important; max-width: 100% !important; object-fit: contain; position: absolute; left: 0; top: 50%; 
+    transform: translateY(-44%) scale(0.7); 
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), height 0.4s ease; 
+    cursor: pointer; pointer-events: auto; z-index: 2500;
+    opacity: 0;
 }
 
 .nav-menu { display: flex; gap: 2.5rem; align-items: center; }
@@ -169,8 +168,8 @@ body {
 .totem-camera-sensor { width: 8px; height: 8px; background: #222; border-radius: 50%; margin: 0 auto 0.8rem auto; border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 3px #00f2fe; }
 .totem-screen-display { background: #060608; border-radius: 18px; height: 480px; position: relative; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.03); }
 .screen-scanlines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); background-size: 100% 4px, 6px 100%; z-index: 10; pointer-events: none; opacity: 0.4; }
-.screen-view-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; opacity: 0; transform: scale(0.95) translateY(10px); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
-.screen-view-card.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; z-index: 5; }
+.screen-view-card { position: absolute; top: 0; left: 0; width: 100%; height: 100%; padding: 2rem; display: flex; flex-direction: column; justify-content: space-between; opacity: 0; transform: scale(0.95) translateY(10px) !important; pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
+.screen-view-card.active { opacity: 1; transform: scale(1) translateY(0) !important; pointer-events: auto; z-index: 5; }
 .view-badge, .view-badge-green, .view-badge-purple { align-self: flex-start; font-size: 0.75rem; font-weight: 800; letter-spacing: 2px; padding: 0.4rem 0.9rem; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 .view-badge { background: rgba(0, 242, 254, 0.1); color: var(--neon-blue); border: 1px solid rgba(0, 242, 254, 0.2); }
 .view-badge-green { background: rgba(37, 211, 102, 0.1); color: var(--neon-green); border: 1px solid rgba(37, 211, 102, 0.2); }
@@ -209,14 +208,12 @@ body {
 .metrica-item p.gradient-text { font-size: 1.35rem; font-weight: 800; margin-bottom: 0.6rem; letter-spacing: -0.5px; }
 .sub-metrica { font-size: 0.95rem; color: rgba(255,255,255,0.45); display: block; line-height: 1.4; }
 
-/* ==========================================================================
-   REPARACIÓN DE ESCALA GIGA: MARQUEE DE MARCAS MAXIMIZADO
-   ========================================================================== */
+/* MARQUEE DE LOGOS: CONFIGURACIÓN MÁSTER DE CAJAS SIMÉTRICAS */
 .clientes-section { padding: 2.5rem 0 0.5rem 0 !important; overflow: hidden; width: 100vw; }
 .section-header-wow-marquee { text-align: center !important; width: 100% !important; max-width: 950px !important; margin: 0 auto 2rem auto !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; }
 .marquee-double-axis-wrapper { display: flex; flex-direction: column; gap: 1.5rem; width: 100%; margin-top: 0; }
 .logos-ticker-container { position: relative; width: 100%; overflow: hidden; display: flex; mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent); }
-.ticker-track { display: flex; gap: 2rem; width: max-content; will-change: transform; }
+.ticker-track { display: flex; gap: 3rem; width: max-content; will-change: transform; }
 .ticker-to-left { animation: marqueeFlowLeft 42s linear infinite !important; }
 .ticker-to-right { animation: marqueeFlowRight 42s linear infinite !important; }
 .logos-ticker-container:hover .ticker-track { animation-play-state: paused; }
@@ -224,13 +221,13 @@ body {
 .logo-cliente-wrapper { 
     background: rgba(255, 255, 255, 0.02); 
     border: 1px solid var(--border-glass); 
-    padding: 0.8rem 1.2rem; 
+    padding: 1rem; 
     border-radius: 20px; 
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    width: 250px; 
-    height: 125px; 
+    width: 290px; 
+    height: 135px; 
     flex-shrink: 0; 
     overflow: hidden; 
     position: relative; 
@@ -238,16 +235,40 @@ body {
     cursor: pointer; 
 }
 
+/* Estado base Pro: los logos de las marcas nacen nítidos y adaptados */
 .logo-cliente-wrapper img { 
     width: auto !important;
     height: auto !important;
-    max-width: 85% !important;   
-    max-height: 85% !important;  
+    max-width: 90% !important;   
+    max-height: 75px !important; 
     object-fit: contain !important; 
     display: block; 
-    opacity: 0.85;
-    filter: brightness(0) invert(1) drop-shadow(0 0 2px rgba(255,255,255,0.2)); 
-    transition: all 0.3s ease;
+    opacity: 0.72 !important; 
+    filter: grayscale(100%) brightness(1.5) contrast(1.1) !important; 
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+/* INYECTOR DE HARDWARE PROTEGIDO: ANCLAJE ESTRICTO EXCLUSIVO A LA MARQUESINA (.logo-cliente-wrapper) */
+.logo-cliente-wrapper img[src*="tesoro"], .logo-cliente-wrapper img[alt*="Tesoro"],
+.logo-cliente-wrapper img[src*="pipnardelrio"], .logo-cliente-wrapper img[alt*="Río"],
+.logo-cliente-wrapper img[src*="avesmaria"], .logo-cliente-wrapper img[alt*="María"],
+.logo-cliente-wrapper img[src*="chipre"], .logo-cliente-wrapper img[alt*="Chipre"],
+.logo-cliente-wrapper img[src*="cityplaza"], .logo-cliente-wrapper img[alt*="Plaza"],
+.logo-cliente-wrapper img[src*="clikhair"], .logo-cliente-wrapper img[alt*="Hair"],
+.logo-cliente-wrapper img[src*="modofit"], .logo-cliente-wrapper img[alt*="Fit"] {
+    width: 100% !important; 
+    max-width: 100% !important;
+    max-height: 105px !important; 
+    transform: scale(1.42) !important; 
+}
+
+.logo-cliente-wrapper img[src*="plazamayor"], .logo-cliente-wrapper img[alt*="Mayor"],
+.logo-cliente-wrapper img[src*="comedal"], .logo-cliente-wrapper img[alt*="Comedal"],
+.logo-cliente-wrapper img[src*="plazaarrayanes"], .logo-cliente-wrapper img[alt*="Arrayanes"] {
+    width: auto !important;
+    max-width: 90% !important;
+    max-height: 62px !important; 
+    transform: scale(1.1) !important; 
 }
 
 .logo-cliente-wrapper:hover { 
@@ -257,89 +278,317 @@ body {
     box-shadow: 0 25px 45px rgba(168, 85, 247, 0.18), 0 0 30px rgba(0, 242, 254, 0.3); 
 }
 .logo-cliente-wrapper:hover img {
-    opacity: 1;
-    filter: brightness(1) invert(0) drop-shadow(0 0 8px rgba(0, 242, 254, 0.6)); 
+    opacity: 1 !important;
+    filter: grayscale(0%) brightness(1) contrast(1) drop-shadow(0 0 8px rgba(0, 242, 254, 0.6)) !important; 
 }
 
-@keyframes marqueeFlowLeft { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-50% - 1rem)); } }
-@keyframes marqueeFlowRight { 0% { transform: translateX(calc(-50% - 1rem)); } 100% { transform: translateX(0); } }
+@keyframes marqueeFlowLeft { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-50% - 1.25rem)); } }
+@keyframes marqueeFlowRight { 0% { transform: translateX(calc(-50% - 1.25rem)); } 100% { transform: translateX(0); } }
 
-/* COMPRESIÓN EXCLUSIVA DE ESPACIOS VACÍOS EN NEGRO */
+/* ==========================================================================
+   REPARACIÓN DE ENCUADRE ABSOLUTO: SECCIÓN VENTAJAS Y BENEFICIOS
+   ========================================================================== */
 .ventajas-section { 
     background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.02) 0%, transparent 70%); 
     border-top: 1px solid var(--border-glass); 
-    padding: 3.5rem 0 !important; 
+    padding: 5rem 0 !important; 
     width: 100vw; 
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
-.ventajas-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 4rem; align-items: center; }
-.ventajas-cards-container { display: flex; flex-direction: column; gap: 2rem; }
-.ventaja-item-wow { display: flex; gap: 2.2rem; background: linear-gradient(135deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 100%); border: 2px solid rgba(255,255,255,0.05); padding: 3.5rem 3rem; border-radius: 36px; transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s; cursor: pointer; will-change: transform; }
+
+.ventajas-section .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto !important; 
+    padding: 0 !important;
+}
+
+.ventajas-grid { 
+    display: grid !important; 
+    grid-template-columns: 1.15fr 0.85fr !important; 
+    gap: 4.5rem !important; 
+    align-items: center !important; 
+    width: 100% !important;
+}
+
+.ventajas-cards-container { 
+    display: flex !important; 
+    flex-direction: column !important; 
+    gap: 2rem !important; 
+    width: 100% !important;
+}
+
+.ventaja-item-wow { 
+    display: flex !important; 
+    gap: 2.2rem !important; 
+    background: linear-gradient(135deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.03) 100%) !important; 
+    border: 2px solid rgba(255,255,255,0.05) !important; 
+    padding: 3.5rem 3rem !important; 
+    border-radius: 36px !important; 
+    transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s !important; 
+    cursor: pointer !important; 
+    will-change: transform !important; 
+}
 .ventaja-icon-glow { font-size: 3rem; line-height: 1; text-shadow: 0 0 25px var(--neon-blue); }
 .ventaja-text-wrap h4 { font-size: 1.6rem; font-weight: 800; margin-bottom: 0.6rem; color: #ffffff; letter-spacing: -0.5px; }
 .ventaja-text-wrap p { color: rgba(255,255,255,0.55); font-size: 1.08rem; line-height: 1.6; }
 .ventaja-item-wow:hover { border-color: var(--neon-purple); box-shadow: 0 30px 60px rgba(0,0,0,0.65), inset 0 0 25px rgba(168, 85, 247, 0.2); transform: translateY(-5px) scale(1.015); }
 .ventajas-frase h3 { font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 900; line-height: 1.4; text-align: center; letter-spacing: -1px; font-style: italic; }
 
-.contacto-section { padding: 3rem 0 4rem 0; text-align: center; }
-.contacto-wrapper { max-width: 850px; margin: 0 auto; padding: 2.5rem 2rem; background: radial-gradient(circle at center, rgba(99, 102, 241, 0.05) 0%, transparent 70%); }
-.contacto-wrapper h2 { font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 900; line-height: 1.3; margin-bottom: 1rem; letter-spacing: -1px; }
-.contacto-wrapper p { color: rgba(255, 255, 255, 0.5); font-size: 1.15rem; }
-
-/* EFECTO DE ONDAS RADIALES VIBRATORIAS - WHATSAPP */
-.whatsapp-btn-floating { 
-    position: fixed; bottom: 2rem; right: 2rem; width: 60px; height: 60px; 
-    background-color: var(--neon-green); border-radius: 50%; 
-    display: flex; justify-content: center; align-items: center; z-index: 2000; 
-    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3); text-decoration: none; 
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, background-color 0.3s ease; 
-    animation: auraWhatsapp 2s infinite ease-in-out;
+/* ==========================================================================
+   REPARACIÓN DE ENCUADRE: TEXTO DE HABLEMOS TOTALMENTE CENTRADO (IMAGE_89F907)
+   ========================================================================== */
+.contacto-section { 
+    padding: 5rem 0 !important; 
+    text-align: center !important; 
+    width: 100vw !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
-.whatsapp-icon-svg { width: 28px; height: 28px; fill: var(--blanco); transition: transform 0.3s ease; }
-.whatsapp-tooltip-floating { position: absolute; right: 75px; background: rgba(6, 6, 8, 0.85); backdrop-filter: blur(10px); border: 1px solid var(--border-glass); color: var(--blanco); padding: 0.5rem 1rem; border-radius: 12px; font-size: 0.85rem; font-weight: 700; white-space: nowrap; opacity: 0; visibility: hidden; transform: translateX(15px); transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease; pointer-events: none; }
-
-.whatsapp-btn-floating:hover { transform: scale(1.08); background-color: #20ba56; box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5); animation-play-state: paused; }
-.whatsapp-btn-floating:hover .whatsapp-icon-svg { transform: rotate(10deg) scale(1.05); }
-.whatsapp-btn-floating:hover .whatsapp-tooltip-floating { opacity: 1; visibility: visible; transform: translateX(0); }
-
-@keyframes auraWhatsapp {
-    0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5), 0 10px 30px rgba(37, 211, 102, 0.3); }
-    70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0), 0 10px 30px rgba(37, 211, 102, 0.3); }
-    100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 10px 30px rgba(37, 211, 102, 0.3); }
+.contacto-wrapper { 
+    width: 90% !important;
+    max-width: 850px !important; 
+    margin: 0 auto !important; /* Forza el encuadre simétrico en laptops y móviles */
+    padding: 2.5rem 2rem !important; 
+    background: radial-gradient(circle at center, rgba(99, 102, 241, 0.05) 0%, transparent 70%) !important; 
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
 }
-
-/* FOOTER COMPRIMIDO */
-.footer-advanced {
-    background: #040406; border-top: 1px solid var(--border-glass); padding: 2.2rem 0 1.5rem 0; width: 100vw; position: relative; overflow: hidden;
+.contacto-wrapper h2 { 
+    font-size: clamp(2rem, 4.5vw, 3rem) !important; 
+    font-weight: 900 !important; 
+    line-height: 1.3 !important; 
+    margin-bottom: 1.2rem !important; 
+    letter-spacing: -1px !important;
+    color: var(--blanco) !important;
 }
-.footer-container { width: 90%; max-width: 1200px; margin: 0 auto; }
-.footer-top-grid { display: flex; justify-content: space-between; align-items: center; padding-bottom: 1.2rem; flex-wrap: wrap; gap: 2rem; }
-.footer-brand-block { display: flex; align-items: center; gap: 2rem; }
-.footer-logo-neon { height: 48px; width: auto; object-fit: contain; filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.3)); }
-.footer-social-wrap { display: flex; align-items: center; gap: 1rem; }
-.footer-social-wrap span { font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; color: rgba(255, 255, 255, 0.4); }
-.social-links-row { display: flex; gap: 1rem; }
-.footer-icon-svg { width: 17px; height: 17px; fill: rgba(255, 255, 255, 0.5); transition: all 0.3s ease; }
-.footer-icon-svg:hover { fill: var(--neon-blue); transform: scale(1.15); }
-.footer-links-block { display: flex; gap: 2.2rem; flex-wrap: wrap; }
-.footer-link-item { font-size: 0.9rem; font-weight: 700; color: rgba(255, 255, 255, 0.6); text-decoration: none; transition: color 0.3s ease; }
-.footer-link-item:hover { color: var(--neon-blue); }
-.footer-separator-line { width: 100%; height: 1px; background: linear-gradient(to right, transparent, var(--border-glass), transparent); margin-bottom: 1.2rem; }
-.footer-bottom-info-row { display: flex; justify-content: space-between; align-items: center; width: 100%; padding-bottom: 1.2rem; gap: 1rem; }
-.info-contact-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: rgba(255, 255, 255, 0.5); white-space: nowrap; }
-.info-contact-item a { color: rgba(255, 255, 255, 0.5); text-decoration: none; transition: color 0.3s ease; }
-.info-contact-item a:hover { color: var(--neon-blue); }
-.info-icon { font-size: 0.95rem; color: var(--neon-blue); }
-.footer-copyright-legal { text-align: center; font-size: 0.75rem; color: rgba(255, 255, 255, 0.2); border-top: 1px solid rgba(255, 255, 255, 0.02); padding-top: 1rem; }
+.contacto-wrapper p { 
+    color: rgba(255, 255, 255, 0.5) !important; 
+    font-size: 1.15rem !important; 
+    max-width: 650px !important;
+    line-height: 1.6 !important;
+}
 
 /* ==========================================================================
-   ALGORITMO RESPONSIVE MAESTRO: CENTRADO TOTAL DE TARJETAS EN CELULARES
+   REPARACIÓN DE WHATSAPP FLOTANTE: ONDAS EXPANSIVAS LIBERADAS (IMAGE_89F907)
+   ========================================================================== */
+.whatsapp-btn-floating { 
+    position: fixed !important; 
+    bottom: 2rem !important; 
+    right: 2rem !important; 
+    width: 60px !important; 
+    height: 60px !important; 
+    background-color: var(--neon-green) !important; 
+    border-radius: 50% !important; 
+    display: flex !important; 
+    justify-content: center !important; 
+    align-items: center !important; 
+    z-index: 4500 !important; 
+    box-shadow: 0 10px 30px rgba(37, 211, 102, 0.35) !important; 
+    text-decoration: none !important; 
+    /* Quitamos el transform fijo que congelaba el renderizado de GSAP */
+    animation: auraWhatsapp 2s infinite ease-in-out !important; 
+    transition: background-color 0.3s ease !important;
+}
+
+/* Blindamos el icono SVG interno para que no sufra deformaciones elásticas */
+.whatsapp-btn-floating .whatsapp-icon-svg { 
+    width: 28px !important; 
+    height: 28px !important; 
+    max-width: 28px !important;
+    max-height: 28px !important;
+    fill: var(--blanco) !important; 
+    display: block !important;
+    transform: none !important;
+    filter: none !important;
+    transition: transform 0.3s ease !important;
+}
+
+.whatsapp-tooltip-floating { 
+    position: absolute !important; 
+    right: 75px !important; 
+    background: rgba(6, 6, 8, 0.85) !important; 
+    backdrop-filter: blur(10px) !important; 
+    border: 1px solid var(--border-glass) !important; 
+    color: var(--blanco) !important; 
+    padding: 0.5rem 1rem !important; 
+    border-radius: 12px !important; 
+    font-size: 0.85rem !important; 
+    font-weight: 700 !important; 
+    white-space: nowrap !important; 
+    opacity: 0 !important; 
+    visibility: hidden !important; 
+    transform: translateX(15px) !important; 
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease !important; 
+    pointer-events: none !important; 
+}
+
+.whatsapp-btn-floating:hover { 
+    background-color: #20ba56 !important; 
+    box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5) !important; 
+}
+.whatsapp-btn-floating:hover .whatsapp-icon-svg { 
+    transform: rotate(10deg) scale(1.05) !important; 
+}
+.whatsapp-btn-floating:hover .whatsapp-tooltip-floating { 
+    opacity: 1 !important; 
+    visibility: visible !important; 
+    transform: translateX(0) !important; 
+}
+
+/* Detonador elástico de la física de ondas líquidas neón */
+@keyframes auraWhatsapp {
+    0% { 
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6), 0 10px 30px rgba(37, 211, 102, 0.35); 
+        transform: scale(1);
+    }
+    70% { 
+        box-shadow: 0 0 0 22px rgba(37, 211, 102, 0), 0 10px 30px rgba(37, 211, 102, 0.35); 
+        transform: scale(1.03);
+    }
+    100% { 
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 10px 30px rgba(37, 211, 102, 0.35); 
+        transform: scale(1);
+    }
+}
+
+/* ==========================================================================
+   PIE DE PÁGINA CORPORATIVO REGULAR PREMIUM: BLINDADO TOTAL
+   ========================================================================== */
+.footer-advanced {
+    background: #040406 !important; 
+    border-top: 1px solid var(--border-glass) !important; 
+    padding: 3rem 0 2rem 0 !important; 
+    width: 100vw !important; 
+    position: relative !important; 
+    display: block !important;
+}
+.footer-container { 
+    width: 90% !important; 
+    max-width: 1200px !important; 
+    margin: 0 auto !important; 
+    padding: 0 !important;
+}
+.footer-top-grid { 
+    display: flex !important; 
+    justify-content: space-between !important; 
+    align-items: center !important; 
+    padding-bottom: 2rem !important; 
+    flex-wrap: wrap !important; 
+    gap: 2rem !important; 
+}
+.footer-brand-block { 
+    display: flex !important; 
+    align-items: center !important; 
+    gap: 2rem !important; 
+}
+
+.footer-logo-neon { 
+    height: 48px !important; 
+    width: auto !important; 
+    max-width: 180px !important;
+    object-fit: contain !important; 
+    display: block !important;
+    filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.3)) !important; 
+}
+.footer-social-wrap { 
+    display: flex !important; 
+    align-items: center !important; 
+    gap: 1rem !important; 
+}
+.footer-social-wrap span { 
+    font-size: 0.75rem !important; 
+    font-weight: 800 !important; 
+    letter-spacing: 1px !important; 
+    color: rgba(255, 255, 255, 0.4) !important; 
+}
+.social-links-row { 
+    display: flex !important; 
+    gap: 1rem !important; 
+}
+.footer-icon-svg { 
+    width: 20px !important; 
+    height: 20px !important; 
+    fill: rgba(255, 255, 255, 0.5) !important; 
+    display: inline-block !important;
+    transition: all 0.3s ease !important; 
+}
+.footer-icon-svg:hover { 
+    fill: var(--neon-blue) !important; 
+    transform: scale(1.15) !important; 
+}
+.footer-links-block { 
+    display: flex !important; 
+    gap: 2.2rem !important; 
+    flex-wrap: wrap !important; 
+}
+.footer-link-item { 
+    font-size: 0.9rem !important; 
+    font-weight: 700 !important; 
+    color: rgba(255, 255, 255, 0.6) !important; 
+    text-decoration: none !important; 
+    transition: color 0.3s ease !important; 
+}
+.footer-link-item:hover { 
+    color: var(--neon-blue) !important; 
+}
+.footer-separator-line { 
+    width: 100% !important; 
+    height: 1px !important; 
+    background: linear-gradient(to right, transparent, var(--border-glass), transparent) !important; 
+    margin-bottom: 2rem !important; 
+}
+.footer-bottom-info-row { 
+    display: flex !important; 
+    justify-content: space-between !important; 
+    align-items: center !important; 
+    width: 100% !important; 
+    padding-bottom: 1.5rem !important; 
+    gap: 1.5rem !important; 
+}
+.info-contact-item { 
+    display: flex !important; 
+    align-items: center !important; 
+    gap: 0.6rem !important; 
+    font-size: 0.88rem !important; 
+    color: rgba(255, 255, 255, 0.5) !important; 
+    white-space: nowrap !important; 
+}
+.info-contact-item a { 
+    color: rgba(255, 255, 255, 0.5) !important; 
+    text-decoration: none !important; 
+    transition: color 0.3s ease !important; 
+}
+.info-contact-item a:hover { 
+    color: var(--neon-blue) !important; 
+}
+.info-icon { 
+    font-size: 1rem !important; 
+    color: var(--neon-blue) !important; 
+}
+.footer-copyright-legal { 
+    text-align: center !important; 
+    font-size: 0.78rem !important; 
+    color: rgba(255, 255, 255, 0.2) !important; 
+    border-top: 1px solid rgba(255, 255, 255, 0.02) !important; 
+    padding-top: 1.5rem !important; 
+}
+
+/* ==========================================================================
+   ALGORITMO RESPONSIVE MAESTRO
    ========================================================================== */
 @media (max-width: 1024px) {
     .console-wrapper { grid-template-columns: 1fr !important; gap: 2.5rem !important; padding: 2rem !important; }
     .footer-top-grid { flex-direction: column !important; text-align: center !important; gap: 1.5rem !important; }
     .footer-brand-block { flex-direction: column !important; gap: 1rem !important; }
     .footer-links-block { justify-content: center !important; gap: 1.5rem !important; }
-    .footer-bottom-info-row { flex-direction: column !important; gap: 0.8rem !important; align-items: center !important; text-align: center !important; }
+    .footer-bottom-info-row { flex-direction: column !important; gap: 1rem !important; align-items: center !important; text-align: center !important; }
     .info-contact-item { white-space: normal !important; }
 }
 
@@ -388,22 +637,28 @@ body {
         position: relative !important;
     }
     
-    /* BLINDAJE LOGO PRINCIPAL EN CELULARES */
     .logo-neon-prominent { 
-        height: 50px !important; 
+        height: 48px !important; 
         width: auto !important;
+        max-width: 100% !important;
         position: relative !important; 
         top: auto !important;
         left: auto !important;
         transform: none !important; 
-        opacity: 1 !important; 
         display: block !important;
         z-index: 2500 !important;
         object-fit: contain !important;
+        opacity: 0;
     }
     
     .navbar-bouncing-dots {
         justify-content: flex-start !important;
+        gap: 8px !important; 
+    }
+    .navbar-bouncing-dots .nav-dot {
+        width: 8px !important; 
+        height: 8px !important;
+        box-shadow: 0 0 10px rgba(255,255,255,0.8) !important;
     }
 
     .hero-advanced { flex-direction: column !important; height: auto !important; padding-top: 8rem !important; gap: 1rem; max-width: 100vw !important; overflow: hidden !important; }
@@ -422,54 +677,72 @@ body {
     .console-tab-item p { font-size: 0.85rem !important; }
     .totem-screen-display { height: 440px !important; }
 
-    /* ==========================================================================
-       SOLUCCIÓN RADICAL DE DESFASE MÓVIL: TARJETAS COMPLETAMENTE CENTRADAS
-       ========================================================================== */
-    .ventajas-section { padding: 2.5rem 0 !important; }
+    /* CASILLAS CENTRADAS SIMÉTRICAS MÓVIL */
+    .ventajas-section { 
+        padding: 3rem 0 !important; 
+        display: block !important;
+    }
     .ventajas-grid { 
         display: flex !important;
         flex-direction: column !important; 
-        align-items: center !important; /* Fuerza el alineamiento en el eje central del smartphone */
+        align-items: center !important; 
         justify-content: center !important;
         width: 100% !important;
-        gap: 2.2rem !important; 
+        margin: 0 auto !important;
+        gap: 2.5rem !important; 
     }
     .ventajas-cards-container { 
         width: 100% !important; 
-        max-width: 480px !important; /* Genera contención simétrica */
-        margin: 0 auto !important; /* Centra el bloque entero horizontalmente */
+        max-width: 440px !important; 
+        margin: 0 auto !important; 
         display: flex !important;
         flex-direction: column !important;
-        gap: 1.5rem !important; 
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 1.8rem !important; 
     }
     .ventaja-item-wow { 
-        width: 100% !important;
+        width: 100% !important; 
         flex-direction: column !important; 
-        align-items: center !important; /* Centra los iconos de forma interna */
-        text-align: center !important; /* Centra los textos interiores de la tarjeta */
+        align-items: center !important; 
+        text-align: center !important; 
         gap: 1rem !important; 
-        padding: 2rem !important; 
-        border-radius: 20px !important; 
-        margin: 0 auto !important;
+        padding: 2.5rem 2rem !important; 
+        border-radius: 24px !important; 
+        margin: 0 auto !important; 
+        transform: none !important; 
     }
     .ventaja-icon-glow { font-size: 2.5rem !important; margin-bottom: 0.2rem; }
     .ventaja-text-wrap h4 { font-size: 1.35rem !important; margin-bottom: 0.4rem; }
     .ventaja-text-wrap p { font-size: 0.95rem !important; line-height: 1.45 !important; color: rgba(255,255,255,0.6); }
-    .ventajas-frase h3 { font-size: 1.4rem !important; line-height: 1.3 !important; padding: 0 1rem; text-align: center !important; margin: 0 auto !important; }
+    .ventajas-frase h3 { font-size: 1.38rem !important; line-height: 1.35 !important; padding: 0 0.5rem; text-align: center !important; margin: 0 auto !important; width: 100% !important; }
 
-    /* MARQUEE MÓVIL */
+    /* MARQUEE MÓVIL OPTIMIZADO */
     .clientes-section { padding: 2rem 0 1rem 0 !important; }
     .marquee-double-axis-wrapper { gap: 1rem !important; }
     .ticker-track { gap: 1.5rem !important; }
-    .logo-cliente-wrapper { width: 135px !important; height: 75px !important; padding: 0.4rem !important; border-radius: 14px !important; }
-    .logo-cliente-wrapper img { max-width: 85% !important; max-height: 85% !important; }
+    .logo-cliente-wrapper { width: 160px !important; height: 85px !important; padding: 0.5rem 1rem !important; border-radius: 14px !important; }
+    
+    .logo-cliente-wrapper img { width: 90% !important; height: auto !important; max-height: 38px !important; opacity: 0.8 !important; }
+    .logo-cliente-wrapper img[src*="tesoro"], .logo-cliente-wrapper img[alt*="Tesoro"],
+    .logo-cliente-wrapper img[src*="plazaarrayanes"], .logo-cliente-wrapper img[alt*="Arrayanes"],
+    .logo-cliente-wrapper img[src*="pipnardelrio"], .logo-cliente-wrapper img[alt*="Río"],
+    .logo-cliente-wrapper img[src*="avesmaria"], .logo-cliente-wrapper img[alt*="María"],
+    .logo-cliente-wrapper img[src*="chipre"], .logo-cliente-wrapper img[alt*="Chipre"],
+    .logo-cliente-wrapper img[src*="cityplaza"], .logo-cliente-wrapper img[alt*="Plaza"],
+    .logo-cliente-wrapper img[src*="clikhair"], .logo-cliente-wrapper img[alt*="Hair"],
+    .logo-cliente-wrapper img[src*="modofit"], .logo-cliente-wrapper img[alt*="Fit"],
+    .logo-cliente-wrapper img[src*="comedal"], .logo-cliente-wrapper img[alt*="Comedal"],
+    .logo-cliente-wrapper img[src*="plazamayor"], .logo-cliente-wrapper img[alt*="Mayor"] {
+        transform: scale(1.35) !important;
+    }
 }
 
 @media (max-width: 480px) {
     .navbar { padding: 0 1.2rem !important; height: 65px !important; width: 92% !important; left: 4% !important; top: 0.8rem !important; }
     .logo-left-container { width: 110px !important; }
-    .logo-neon-prominent { height: 42px !important; }
-    .navbar-bouncing-dots { gap: 8px !important; }
+    .logo-neon-prominent { height: 40px !important; }
+    .navbar-bouncing-dots { gap: 6px !important; }
     .navbar-bouncing-dots .nav-dot { width: 10px !important; height: 10px !important; }
     .totem-screen-display { height: 480px !important; }
 }
