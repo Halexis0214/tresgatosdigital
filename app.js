@@ -48,31 +48,53 @@ document.addEventListener("DOMContentLoaded", () => {
             .to(".navbar-bouncing-dots", { display: "none", duration: 0.1 });
     }
 
-    // EFECTO PORTAL TRAS ENTRADA (PROFUNDIDAD MÁXIMA EN PC)
+// ==========================================================================
+    // MOTOR PORTAL CINEMÁTICO: EMPUJE DIRECTO DE HARDWARE POR MARGEN INYECTADO
+    // ==========================================================================
     if (window.innerWidth > 768) {
         const portalTl = gsap.timeline({
             scrollTrigger: {
                 trigger: ".portal-viewport",
                 start: "top top",
-                end: "+=1300", 
-                scrub: 1,      
-                pin: true,     
+                end: "+=1600",     // Recorrido extendido elástico para un movimiento pausado
+                scrub: 1.5,        // Inercia amortiguada de ingravidez
+                pin: true,         // Bloquea la pantalla durante la animación
                 anticipatePin: 1
             }
         });
 
-        portalTl.to(".portal-intro-text", { opacity: 0, y: -50, duration: 0.3 })
-        .to(".portal-totem-frame", { scale: 14, transformOrigin: "center center", duration: 1.2, ease: "power2.inOut" }, "-=0.2")
-        .to(".portal-screen-content", { scale: 1.35, duration: 1.2, ease: "power1.inOut" }, "-=1.2")
-        .to(".portal-bg-brand-watermark", { scale: 1.25, opacity: 0, duration: 0.8, ease: "power1.out" }, "-=1.2")
-        .to(".portal-container", { opacity: 0, display: "none", duration: 0.4 })
-        .to(".content-wrapper-delayed", { opacity: 1, visibility: "visible", duration: 0.5 }, "-=0.2")
-        .to(".navbar", { 
-            opacity: 1, y: 0, duration: 0.4, ease: "power3.out",
-            onComplete: () => {
-                ejecutarShowBouncingDotsNav();
-            }
-        }, "-=0.3");
+      // 1. EL LOGO INFERIOR CAE AL SUELO: Forzado absoluto usando la propiedad TOP
+        portalTl.to(".portal-intro-text", { 
+            top: "150%",      // Desplaza el contenedor completo por debajo del 100% de la pantalla
+            opacity: 0,      
+            duration: 1, 
+            ease: "none"     
+        })
+        
+        // 2. EL ASTRONAUTA ULTRA-GIGANTE DESPEGA VERTICALMENTE AL CIELO
+        .to(".portal-totem-frame", { 
+            yPercent: -130,     // Despegue continuo hacia el espacio exterior
+            duration: 1, 
+            ease: "none"     
+        }, "<")                // Arranca en paralelo exacto con el logo inferior
+        
+        // 3. EL TEXTO ESCALONADO SE DESVANECE EN SU SITIO TOTALMENTE QUIETO
+        .to(".portal-staggered-title", {
+            opacity: 0,      
+            scale: 0.95,        // Sutil efecto de alejamiento espacial
+            duration: 0.6,   
+            ease: "none"
+        }, "<")              
+        
+        // Transición final y destrucción total de la capa para liberar tu carrusel 3D de abajo
+        .to(".portal-container", { 
+            opacity: 0, 
+            display: "none", 
+            pointerEvents: "none", 
+            duration: 0.3 
+        })
+        .to(".content-wrapper-delayed", { opacity: 1, visibility: "visible", duration: 0.4 }, "-=0.15")
+        .to(".navbar", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", onComplete: ejecutarShowBouncingDotsNav }, "-=0.15");
     } else {
         gsap.set(".portal-viewport", { display: "none" });
         gsap.set(".portal-container", { display: "none" });
@@ -113,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================================================
-    // SOLUCIÓN RADICAL CORREGIDA: CARRUSEL 3D CON APAGADO ELÉCTRICO DE CONFLICTOS
+    // SISTEMA CARRUSEL 3D: MOTOR ULTRA-FLUIDO CON FILTRO ANTI-ENGANCHE NATIVO
     // ==========================================================================
     const stage3D = document.querySelector(".carousel-stage");
     const wrapper3D = document.querySelector(".carousel-3d-wrapper");
@@ -124,9 +146,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const anguloPorTarjeta = 360 / totalTotems;
         const radioCilindro = window.innerWidth > 768 ? 320 : 150; 
 
+        // Posicionamiento físico inicial de los tótems en el cilindro 3D
         tótems.forEach((totem, indice) => {
             const anguloRotacion = indice * anguloPorTarjeta;
             totem.style.transform = `rotateY(${anguloRotacion}deg) translateZ(${radioCilindro}px)`;
+            
+            // CANDADO EXTRA EN EL DOM: Evita que el navegador intente arrastrar las imágenes/links
+            totem.setAttribute("draggable", "false");
+            totem.querySelectorAll("img, a, span").forEach(el => el.setAttribute("draggable", "false"));
         });
 
         let rotacionActualY = 0;
@@ -137,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let velocidadPiloto = -0.12; 
         let requestIDPiloto = null; 
 
-        // Función del motor automático
+        // Bucle del piloto automático de rotación continua
         function loopPilotoAutomatico() {
             if (pilotoAutomatedActive && !estaArrastrando) {
                 rotacionActualY += velocidadPiloto;
@@ -145,9 +172,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 requestIDPiloto = requestAnimationFrame(loopPilotoAutomatico);
             }
         }
+        // Encendido inicial del piloto automático
         requestIDPiloto = requestAnimationFrame(loopPilotoAutomatico);
 
+        // CLIC SOSTENIDO: Apaga el piloto automático y frena el bucle de inmediato
         const iniciarArrastre = (e) => {
+            // DETONADOR MÁSTER: Apaga el arrastre fantasma de imágenes del navegador
+            // Esto evita que el mouse se quede pegado o buclado al soltar el clic
+            if (e.type === "mousedown") {
+                e.preventDefault(); 
+            }
+            
             estaArrastrando = true;
             pilotoAutomatedActive = false; 
             
@@ -161,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
             rotacionBase = rotacionActualY;
         };
 
+        // MOVIMIENTO: Permite arrastrar el carrusel libremente con el mouse
         const moverArrastre = (e) => {
             if (!estaArrastrando) return;
             const clienteX = e.clientX || (e.touches && e.touches[0].clientX);
@@ -170,10 +206,12 @@ document.addEventListener("DOMContentLoaded", () => {
             gsap.set(wrapper3D, { rotateY: rotacionActualY });
         };
 
+        // AL SOLTAR EL CLIC: Libera el carrusel al instante sin enganches residuales
         const finalizarArrastre = () => {
             if (!estaArrastrando) return;
-            estaArrastrando = false;
+            estaArrastrando = false; // Se apaga la bandera al milisegundo exacto
             
+            // Acomoda el carrusel en la tarjeta más cercana de forma matemática
             const cuadranteDestino = Math.round(rotacionActualY / anguloPorTarjeta) * anguloPorTarjeta;
             
             gsap.to(wrapper3D, { 
@@ -182,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ease: "power2.out", 
                 onComplete: () => { 
                     rotacionActualY = cuadranteDestino; 
-                    pilotoAutomatedActive = true;
+                    pilotoAutomatedActive = true; // Reactiva el piloto automático seguro
                     
                     if (!requestIDPiloto) {
                         requestIDPiloto = requestAnimationFrame(loopPilotoAutomatico);
@@ -191,13 +229,19 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         };
 
+        // Escuchadores de eventos amarrados a la ventana global para capturar la suelta SÍ O SÍ
         stage3D.addEventListener("mousedown", iniciarArrastre);
         window.addEventListener("mousemove", moverArrastre);
         window.addEventListener("mouseup", finalizarArrastre);
         
+        // Soporte para dispositivos móviles táctiles
         stage3D.addEventListener("touchstart", iniciarArrastre, { passive: true });
         window.addEventListener("touchmove", moverArrastre, { passive: true });
         window.addEventListener("touchend", finalizarArrastre);
+
+        // Si el mouse se sale del navegador o pierde el foco, se suelta solo al instante
+        window.addEventListener("mouseleave", finalizarArrastre);
+        window.addEventListener("blur", finalizarArrastre);
     }
 
     // GESTIÓN CONSOLA INTERACTIVA

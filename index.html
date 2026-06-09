@@ -56,24 +56,31 @@
         </nav>
     </header>
 
+    <!-- ==========================================================================
+         PORTAL MODIFICADO: ASTRONAUTA PROTAGÓNICO Y TÍTULO ESCALONADO INTERACTIVO
+         ========================================================================== -->
     <div class="portal-viewport">
         <div class="portal-container">
-            <div class="portal-bg-brand-watermark">
-                <img src="LOGO_SOLO_TRES_GATOS.png" alt="Universo Tres Gatos Publicidad">
-            </div>
+            
+            <!-- CAPA 1: Título Escalonado (Se disuelve quieto en su sitio) -->
+            <h2 class="portal-staggered-title">
+                <span class="line-1">EXPERIENCIA</span>
+                <span class="line-2">IMPACTANTE</span>
+                <span class="line-3">PARA MARCAS</span>
+                <span class="line-4">ÚNICAS.</span>
+            </h2>
 
+            <!-- CAPA 2: El Astronauta Gigante (Vuela al cielo al dar scroll) -->
             <div class="portal-totem-frame">
-                <div class="portal-screen">
-                    <div class="scanline-effect"></div>
-                    <img src="img/universo-tres-gatos.jpg" alt="Diseño de Pantallas e Ingeniería Tres Gatos" class="portal-screen-content">
-                    <div class="screen-reflection"></div>
-                </div>
+                <img src="astronauta.png" alt="Tres Gatos Astronauta" class="portal-screen-content">
             </div>
             
+            <!-- CAPA 3: Logo Oficial Inferior y Subtítulo (Caen al suelo al dar scroll) -->
             <div class="portal-intro-text">
-                <span class="badge-creative">Estudio Creativo Premium</span>
-                <h1 class="portal-title">Entra al Universo de la <span class="gradient-text">Publicidad Digital</span></h1>
-                <p class="portal-subtitle">Desliza hacia abajo para adentrarte en nuestras pantallas corporativas...</p>
+                <div class="portal-logo-wrapper">
+                    <img src="LOGO_SOLO_TRES_GATOS.png" alt="Tres Gatos Logo Portal" class="portal-logo-media">
+                </div>
+                <p class="portal-subtitle">Experiencias digitales de otro mundo</p>
             </div>
         </div>
     </div>
