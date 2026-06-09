@@ -12,6 +12,83 @@ document.addEventListener("DOMContentLoaded", () => {
     gsap.registerPlugin(ScrollTrigger);
 
     // ==========================================================================
+    // MOTOR PORTAL CINEMÁTICO UNIFICADO: CONTRALOR ELÁSTICO DE SCROLL (PC Y MÓVIL)
+    // ==========================================================================
+    
+    // Forzamos a que la web de abajo esté disponible en el flujo para que el navegador mida la altura real
+    gsap.set(".content-wrapper-delayed", { opacity: 0, visibility: "visible", display: "block" });
+    gsap.set(".portal-container", { opacity: 1, display: "block", visibility: "visible" });
+    window.scrollTo(0, 0);
+
+    // Calculamos la fuerza del despegue según el tamaño del dispositivo
+    const recorridoScroll = window.innerWidth > 768 ? "+=1600" : "+=900";
+
+    const portalTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: ".portal-viewport",
+            start: "top top",
+            end: recorridoScroll,  // Recorrido elástico calibrado por hardware
+            scrub: 1.2,            // Sincronización directa y fluida con el movimiento del dedo
+            pin: true,             // Bloquea la pantalla obligatoriamente mientras se hace el despegue
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+                // Si el usuario está en el celular y regresa al puro techo, aseguramos el reseteo visual
+                if (self.progress === 0 && window.innerWidth <= 768) {
+                    gsap.set(".navbar", { opacity: 0, y: -20 });
+                    ejecutarShowBouncingDotsNav();
+                }
+            }
+        }
+    });
+
+    // 1. EL LOGO INFERIOR CAE AL SUELO POR PROPIEDAD TOP NATIVA
+    portalTl.to(".portal-intro-text", { 
+        top: "150%",      // Desplaza el contenedor completo por debajo de la pantalla
+        opacity: 0,      
+        duration: 1, 
+        ease: "none"     
+    })
+    
+    // 2. EL ASTRONAUTA ULTRA-GIGANTE DESPEGA VERTICALMENTE AL CIELO CON EL SCROLL
+    .to(".portal-totem-frame", { 
+        yPercent: -130,     // Despegue continuo hacia el espacio exterior sincronizado con el dedo
+        duration: 1, 
+        ease: "none"     
+    }, "<")                // Arranca en paralelo exacto con el logo inferior
+    
+    // 3. EL TEXTO ESCALONADO SE DESVANECE EN SU SITIO TOTALMENTE QUIETO
+    .to(".portal-staggered-title", {
+        opacity: 0,      
+        scale: 0.95,        // Sutil efecto de alejamiento espacial
+        duration: 0.6,   
+        ease: "none"
+    }, "<")              
+    
+    // 4. TRANSICIÓN FINAL: Desvanece la capa del portal y le da el paso a la web principal
+    .to(".portal-container", { 
+        opacity: 0, 
+        display: "none", 
+        pointerEvents: "none", 
+        duration: 0.3 
+    })
+    
+    // 5. ENCIENDE LA WEB PRINCIPAL DE PRODUCCIÓN EN ORDEN NATURAL DESDE ARRIBA
+    .to(".content-wrapper-delayed", { 
+        opacity: 1, 
+        duration: 0.4 
+    }, "-=0.15")
+    
+    // 6. REVELA LA NAVBAR CON LOS PUNTITOS SALTANINES EN LA CABECERA
+    .to(".navbar", { 
+        opacity: 1, 
+        y: 0, 
+        duration: 0.4, 
+        ease: "power3.out", 
+        onComplete: ejecutarShowBouncingDotsNav 
+    }, "-=0.15");
+
+    // ==========================================================================
     // FUNCIÓN DE DISPARO RADIAL: REBOTE ELÁSTICO (FÍSICA COMPLETA DEL VIDEO)
     // ==========================================================================
     function ejecutarShowBouncingDotsNav() {
@@ -52,89 +129,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================================================
-    // MOTOR PORTAL: SEPARACIÓN DE HARDWARE (PC PREMIUM / MÓVIL ULTRA-FLUIDO)
+    // RASTREADOR DE RE-ENTRADA EN TECHO GLOBAL
     // ==========================================================================
-    if (window.innerWidth > 768) {
-        // --- COMPORTAMIENTO CINEMÁTICO PARA COMPUTADORES ---
-        const portalTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".portal-viewport",
-                start: "top top",
-                end: "+=1600",     // Recorrido extendido elástico para un movimiento pausado
-                scrub: 1.5,        // Inercia amortiguada de ingravidez
-                pin: true,         // Bloquea la pantalla durante la animación
-                anticipatePin: 1
-            }
-        });
-
-        // 1. EL LOGO INFERIOR CAE AL SUELO: Forzado absoluto usando la propiedad TOP
-        portalTl.to(".portal-intro-text", { 
-            top: "150%",      // Desplaza el contenedor completo por debajo del 100% de la pantalla
-            opacity: 0,      
-            duration: 1, 
-            ease: "none"     
-        })
-        
-        // 2. EL ASTRONAUTA ULTRA-GIGANTE DESPEGA VERTICALMENTE AL CIELO
-        .to(".portal-totem-frame", { 
-            yPercent: -130,     // Despegue continuo hacia el espacio exterior
-            duration: 1, 
-            ease: "none"     
-        }, "<")                // Arranca en paralelo exacto con el logo inferior
-        
-        // 3. EL TEXTO ESCALONADO SE DESVANECE EN SU SITIO TOTALMENTE QUIETO
-        .to(".portal-staggered-title", {
-            opacity: 0,      
-            scale: 0.95,        // Sutil efecto de alejamiento espacial
-            duration: 0.6,   
-            ease: "none"
-        }, "<")              
-        
-        // Transición final y destrucción de la capa para liberar la web de abajo
-        .to(".portal-container", { 
-            opacity: 0, 
-            display: "none", 
-            pointerEvents: "none", 
-            duration: 0.3 
-        })
-        .to(".content-wrapper-delayed", { opacity: 1, visibility: "visible", duration: 0.4 }, "-=0.15")
-        .to(".navbar", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", onComplete: ejecutarShowBouncingDotsNav }, "-=0.15");
-
-    } else {
-        // --- COMPORTAMIENTO MÓVIL DIRECTO: EVITA CORTOS DE DESBORDAMIENTO ---
-        gsap.set(".content-wrapper-delayed", { opacity: 0, visibility: "hidden" });
-        window.scrollTo(0, 0);
-
-        // Al primer toque táctil de deslizamiento, el portal se retira de forma fluida y natural
-        ScrollTrigger.create({
-            trigger: ".portal-viewport",
-            start: "top top",
-            end: "+=120", 
-            scrub: true,
-            onLeave: () => {
-                gsap.to(".portal-container", { 
-                    opacity: 0, 
-                    display: "none", 
-                    pointerEvents: "none", 
-                    duration: 0.35,
-                    onComplete: () => {
-                        // Enciende la web principal desde el Hero superior
-                        gsap.to(".content-wrapper-delayed", { opacity: 1, visibility: "visible", duration: 0.4 });
-                        gsap.to(".navbar", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", onComplete: ejecutarShowBouncingDotsNav });
-                        ScrollTrigger.refresh();
-                    }
-                });
-            }
-        });
-    }
-
-    // DISPARADOR RECURRENTE EN TECHO
     let seHaEjecutadoEnTecho = true;
     window.addEventListener("scroll", () => {
         if (window.scrollY === 0) {
             if (!seHaEjecutadoEnTecho) {
                 seHaEjecutadoEnTecho = true;
-                ejecutarShowBouncingDotsNav();
+                ScrollTrigger.refresh(); // Sincroniza los hilos de hardware de GSAP
             }
         } else {
             seHaEjecutadoEnTecho = false;
@@ -202,7 +204,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // CLIC SOSTENIDO: Apaga el piloto automático y frena el bucle de inmediato
         const iniciarArrastre = (e) => {
-            // DETONADOR MÁSTER: Apaga el arrastre fantasma de imágenes del navegador
             if (e.type === "mousedown") {
                 e.preventDefault(); 
             }
@@ -220,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
             rotacionBase = rotacionActualY;
         };
 
-        // MOVIMIENTO: Permite arrastrar el carrusel libremente con el mouse
+        // MOVIMIENTO: Permite arrastrar el carrusel libremente con el mouse o dedo
         const moverArrastre = (e) => {
             if (!estaArrastrando) return;
             const clienteX = e.clientX || (e.touches && e.touches[0].clientX);
@@ -233,7 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // AL SOLTAR EL CLIC: Libera el carrusel al instante sin enganches residuales
         const finalizarArrastre = () => {
             if (!estaArrastrando) return;
-            estaArrastrando = false; // Se apaga la bandera al milisegundo exacto
+            estaArrastrando = false; 
             
             // Acomoda el carrusel en la tarjeta más cercana de forma matemática
             const cuadranteDestino = Math.round(rotacionActualY / anguloPorTarjeta) * anguloPorTarjeta;
@@ -244,7 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ease: "power2.out", 
                 onComplete: () => { 
                     rotacionActualY = cuadranteDestino; 
-                    pilotoAutomatedActive = true; // Reactiva el piloto automático seguro
+                    pilotoAutomatedActive = true; 
                     
                     if (!requestIDPiloto) {
                         requestIDPiloto = requestAnimationFrame(loopPilotoAutomatico);
