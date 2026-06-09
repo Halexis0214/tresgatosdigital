@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const navDots = document.querySelectorAll(".navbar-bouncing-dots .nav-dot");
     let globalReboteTimeline = null;
 
+    // Forzamos el registro de la librería de scroll de GSAP
+    gsap.registerPlugin(ScrollTrigger);
+
     // ==========================================================================
     // FUNCIÓN DE DISPARO RADIAL: REBOTE ELÁSTICO (FÍSICA COMPLETA DEL VIDEO)
     // ==========================================================================
@@ -48,10 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
             .to(".navbar-bouncing-dots", { display: "none", duration: 0.1 });
     }
 
-// ==========================================================================
-    // MOTOR PORTAL CINEMÁTICO: EMPUJE DIRECTO DE HARDWARE POR MARGEN INYECTADO
+    // ==========================================================================
+    // MOTOR PORTAL: SEPARACIÓN DE HARDWARE (PC PREMIUM / MÓVIL ULTRA-FLUIDO)
     // ==========================================================================
     if (window.innerWidth > 768) {
+        // --- COMPORTAMIENTO CINEMÁTICO PARA COMPUTADORES ---
         const portalTl = gsap.timeline({
             scrollTrigger: {
                 trigger: ".portal-viewport",
@@ -63,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-      // 1. EL LOGO INFERIOR CAE AL SUELO: Forzado absoluto usando la propiedad TOP
+        // 1. EL LOGO INFERIOR CAE AL SUELO: Forzado absoluto usando la propiedad TOP
         portalTl.to(".portal-intro-text", { 
             top: "150%",      // Desplaza el contenedor completo por debajo del 100% de la pantalla
             opacity: 0,      
@@ -86,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ease: "none"
         }, "<")              
         
-        // Transición final y destrucción total de la capa para liberar tu carrusel 3D de abajo
+        // Transición final y destrucción de la capa para liberar la web de abajo
         .to(".portal-container", { 
             opacity: 0, 
             display: "none", 
@@ -95,12 +99,33 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .to(".content-wrapper-delayed", { opacity: 1, visibility: "visible", duration: 0.4 }, "-=0.15")
         .to(".navbar", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", onComplete: ejecutarShowBouncingDotsNav }, "-=0.15");
+
     } else {
-        gsap.set(".portal-viewport", { display: "none" });
-        gsap.set(".portal-container", { display: "none" });
-        gsap.set(".content-wrapper-delayed", { opacity: 1, visibility: "visible" });
-        gsap.set(".navbar", { opacity: 1, y: 0 });
-        ejecutarShowBouncingDotsNav();
+        // --- COMPORTAMIENTO MÓVIL DIRECTO: EVITA CORTOS DE DESBORDAMIENTO ---
+        gsap.set(".content-wrapper-delayed", { opacity: 0, visibility: "hidden" });
+        window.scrollTo(0, 0);
+
+        // Al primer toque táctil de deslizamiento, el portal se retira de forma fluida y natural
+        ScrollTrigger.create({
+            trigger: ".portal-viewport",
+            start: "top top",
+            end: "+=120", 
+            scrub: true,
+            onLeave: () => {
+                gsap.to(".portal-container", { 
+                    opacity: 0, 
+                    display: "none", 
+                    pointerEvents: "none", 
+                    duration: 0.35,
+                    onComplete: () => {
+                        // Enciende la web principal desde el Hero superior
+                        gsap.to(".content-wrapper-delayed", { opacity: 1, visibility: "visible", duration: 0.4 });
+                        gsap.to(".navbar", { opacity: 1, y: 0, duration: 0.4, ease: "power3.out", onComplete: ejecutarShowBouncingDotsNav });
+                        ScrollTrigger.refresh();
+                    }
+                });
+            }
+        });
     }
 
     // DISPARADOR RECURRENTE EN TECHO
@@ -178,7 +203,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // CLIC SOSTENIDO: Apaga el piloto automático y frena el bucle de inmediato
         const iniciarArrastre = (e) => {
             // DETONADOR MÁSTER: Apaga el arrastre fantasma de imágenes del navegador
-            // Esto evita que el mouse se quede pegado o buclado al soltar el clic
             if (e.type === "mousedown") {
                 e.preventDefault(); 
             }
