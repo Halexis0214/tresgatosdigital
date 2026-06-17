@@ -18,6 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Forzamos a que la web de abajo esté disponible en el flujo para que el navegador mida la altura real
     gsap.set(".content-wrapper-delayed", { opacity: 0, visibility: "visible", display: "block" });
     gsap.set(".portal-container", { opacity: 1, display: "block", visibility: "visible" });
+    
+    // PARACHOQUES DE HARDWARE: Asegura que el contenedor del astronauta sea visible inmediatamente en móviles
+    gsap.set(".portal-totem-frame, .portal-screen-content", { opacity: 1, visibility: "visible", scale: 1 });
+    
     window.scrollTo(0, 0);
 
     // Calculamos la fuerza del despegue según el tamaño del dispositivo
@@ -398,16 +402,40 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // DISPARADORES RECURRENTES EN SCROLL VENTAJAS
+    // ==========================================================================
+    // DISPARADORES RECURRENTES EN SCROLL VENTAJAS (CON FILTRO DE LIMPIEZA CLEARPROPS)
+    // ==========================================================================
     if (window.innerWidth > 768) {
         gsap.from(".logo-neon-trigger-left", {
-            scrollTrigger: { trigger: ".ventajas-section", start: "top 85%", end: "bottom 15%", toggleActions: "restart reverse restart reverse" },
-            x: -300, opacity: 0, duration: 1.2, stagger: 0.2, ease: "back.out(1.1)"
+            scrollTrigger: { 
+                trigger: ".ventajas-section", 
+                start: "top 85%", 
+                end: "bottom 15%", 
+                toggleActions: "restart reverse restart reverse" 
+            },
+            x: -300, 
+            opacity: 0, 
+            duration: 1.2, 
+            stagger: 0.2, 
+            ease: "back.out(1.1)",
+            onComplete: () => {
+                // EL CANDADO MAESTRO PARA PC: Limpia la propiedad inline al finalizar para evitar atasques a la izquierda
+                gsap.set(".logo-neon-trigger-left", { clearProps: "transform,x" }); 
+            }
         });
     } else {
         gsap.from(".logo-neon-trigger-left", {
-            scrollTrigger: { trigger: ".ventajas-section", start: "top 90%", end: "bottom 10%", toggleActions: "restart reverse restart reverse" },
-            x: -150, opacity: 0, duration: 0.8, stagger: 0.15, ease: "power2.out",
+            scrollTrigger: { 
+                trigger: ".ventajas-section", 
+                start: "top 90%", 
+                end: "bottom 10%", 
+                toggleActions: "restart reverse restart reverse" 
+            },
+            x: -150, 
+            opacity: 0, 
+            duration: 0.8, 
+            stagger: 0.15, 
+            ease: "power2.out",
             onComplete: () => {
                 gsap.set(".logo-neon-trigger-left", { clearProps: "transform,x" }); 
             }
