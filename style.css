@@ -62,6 +62,7 @@ body {
     height: 100vh; 
     overflow: hidden; 
     position: relative;
+    margin-bottom: 0 !important; /* Elimina cualquier separación residual con el resto de las secciones */
 }
 
 .portal-container { 
@@ -69,7 +70,6 @@ body {
     top: 0; left: 0; 
     width: 100%; height: 100%; 
     z-index: 500; 
-    /* Cristal traslúcido: Permite que los puntos del canvas respiren por detrás al cargar */
     background: radial-gradient(circle at center, rgba(106, 27, 154, 0.12) 0%, rgba(6, 6, 8, 0.85) 50%, rgba(6, 6, 8, 1) 100%);
     overflow: hidden;
     display: block !important;
@@ -81,7 +81,7 @@ body {
 .content-wrapper-delayed {
     position: relative !important;
     z-index: 100 !important; 
-    background: transparent !important; /* SE QUITA EL FONDO NEGRO DE ESTA CAPA MAESTRA */
+    background: transparent !important; 
     opacity: 0; 
     visibility: hidden; 
     display: block !important;
@@ -697,7 +697,7 @@ body {
 }
 
 /* ==========================================================================
-   ALGORITMO RESPONSIVE MAESTRO
+   ALGORITMO RESPONSIVE MAESTRO (CORREGIDO PARA MÓVILES - PROPORCIÓN PERFECTA)
    ========================================================================== */
 @media (max-width: 1024px) {
     .console-wrapper { grid-template-columns: 1fr !important; gap: 2.5rem !important; padding: 2rem !important; }
@@ -721,34 +721,63 @@ body {
 @media (max-width: 768px) {
     .menu-toggle { display: flex !important; }
 
-    /* RESTRICCIÓN HORIZONTAL EXCLUSIVA PARA MÓVILES COMPLETAMENTE TRANSPARENTE */
+    /* Forzamos a que el viewport en móvil mantenga las proporciones de los absolutos */
+    .portal-viewport {
+        height: 100vh !important;
+        min-height: 600px !important;
+    }
+
     .content-wrapper-delayed {
         position: relative !important;
         z-index: 100 !important; 
-        background: transparent !important; /* TRASLÚCIDO EN CELULARES TAMBIÉN */
+        background: transparent !important; 
         opacity: 0; 
         visibility: hidden; 
         display: block !important;
         transition: opacity 0.4s ease, visibility 0.4s ease;
     }
 
-    /* ADAPTACIÓN MILIMÉTRICA RESPONSIVE DEL PORTAL (ASTRONAUTA Y TEXTO CENTRADO) */
-    .portal-totem-frame {
-        width: 380px !important;
-        height: 380px !important;
-        margin-left: -190px !important; 
-        margin-top: -190px !important;
-        top: 45% !important; 
-    }
-
+    /* 1. EL TEXTO MÓVIL SE FIJA SEGURO ARRIBA EN EL CIELO */
     .portal-staggered-title {
-        font-size: 1.8rem !important; 
+        position: absolute !important;
+        top: 15% !important; /* Forzado al techo superior del celular */
         left: 50% !important;
-        top: 22% !important; 
-        transform: translateX(-50%) !important; 
+        transform: translateX(-50%) !important; /* Centrado horizontal sin descalce */
+        font-size: 1.6rem !important; 
         text-align: center !important; 
         width: 100% !important;
-        padding: 0 1rem !important;
+        max-width: 90vw !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        z-index: 25 !important;
+    }
+
+    .portal-staggered-title span {
+        text-align: center !important;
+        white-space: normal !important; 
+    }
+
+    /* 2. EL ASTRONAUTA EN MÓVIL SE QUEDA ABAJO DEL TEXTO, EN EL MEDIO EXACTO */
+    .portal-totem-frame {
+        position: absolute !important;
+        top: 52% !important; /* Despeja completamente la zona superior de letras */
+        left: 50% !important;
+        width: 290px !important; 
+        height: 290px !important;
+        margin-left: -145px !important; /* Mitad exacta de 290px para centrado simétrico */
+        margin-top: -145px !important;  
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        z-index: 10 !important;
+    }
+
+    .portal-screen-content {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
     }
 
     .line-1, .line-2, .line-3, .line-4 {
